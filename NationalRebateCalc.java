@@ -54,6 +54,7 @@ public class NationalRebateCalc {
         //excecuting the feature that the user selected. 
         if (userIn == 1) {
             System.out.println("Enter the donation amount: ");
+            System.out.print(">> ");
             donation = new Scanner(System.in).nextFloat();
             total = donation + calc(donation, livesIn);
 
@@ -61,6 +62,7 @@ public class NationalRebateCalc {
         }
         else {
             System.out.println("Enter the donation amount: ");
+            System.out.print(">> ");
             donation = new Scanner(System.in).nextFloat();
             total = equals(donation, livesIn);
 
@@ -75,7 +77,8 @@ public class NationalRebateCalc {
         boolean bol = false;
         String province = "";
         do{
-            System.out.print("Please enter your province: ");
+            System.out.println("Please enter your province: ");
+            System.out.print(">> ");
             province = new Scanner(System.in).nextLine();
 
             for(int x = 0; x < 13; x++){
