@@ -1,26 +1,32 @@
 /**
- * This program will calculate important donation values for you while factoring in the tax rebate you get from it.
+ * This program will calculate important donation values nationally for you while factoring in the tax rebate you get from it.
  * If you want to know how much net donations $200 will net you if you keep donating the rebates, it will calculate it for you
  * If you want to know how much you should donate in order to pay a net of $200 of your money, it will calculate that for you as well.
  * Author: LeBoiZ
- * Date: 2/14/2023
+ * Date: 2/15/2023
  */
 
 import java.util.Scanner;
-public class RebateCalc {
+public class NationalRebateCalc {
     public static void main(String[] args) {
         //FedTax under 200: 15%
         //ProvTax under 200: 5.05%
         //FedTax above 200: 29%
-        //ProvTax above 200: 11.16%\
+        //ProvTax above 200: 11.16%
         float total, donation;
         byte userIn = 0;
         boolean bolTryCatch = true;
+        String prov;
+        Province livesIn;
 
         //welcome message
-        System.out.println("\nWelcome to the multi use donation rebate calculator in Ontario!");
-        System.out.println("We currently have 2 features: \n");
+        System.out.println("\nWelcome to the multi use donation rebate calculator in Canada!");
+        System.out.println("Before we begin, please enter the province you live in: (you may enter the province code or name)");
 
+        prov = getProvince();
+        livesIn = new Province(prov);
+
+        System.out.println("\nWe currently have 2 features: \n");
         do {
             try {
                 System.out.println("1. Enter a donation amount and we will calculate how much net donations you can make with it. ");
@@ -46,20 +52,44 @@ public class RebateCalc {
         if (userIn == 1) {
             System.out.println("Enter the donation amount: ");
             donation = new Scanner(System.in).nextFloat();
-            total = donation + calc(donation);
+            total = donation + calc(donation, livesIn);
 
             System.out.println("The total donation value that you can give is: " + round(total, 2));
         }
         else {
             System.out.println("Enter the donation amount: ");
             donation = new Scanner(System.in).nextFloat();
-            total = equals(donation);
+            total = equals(donation, livesIn);
 
             System.out.println("To have a net donation of $" + donation + ", you should donate $" + round(total, 2));
         }
     }
 
-    public static float calc(float donation) {
+    public static String getProvince(){
+        String[] provs = {"AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"};
+        String[] provinces = {"Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Islands", "Quebec", "Saskatchewan", "Yukon"};
+        boolean bol = false;
+        String province = "";
+        do{
+            System.out.print("Please enter your province: ");
+            province = new Scanner(System.in).nextLine();
+
+            for(int x = 0; x < 13; x++){
+                if(province.equalsIgnoreCase(provs[x]) || province.equalsIgnoreCase(provinces[x])){
+                    province = provs[x];
+                    bol = true;
+                    break;
+                }
+            }
+            if(bol == false){
+                System.out.println("Error. Please enter a valid province name or code.");
+            }
+        }while(bol == false);
+        
+        return province;
+    }
+
+    public static float calc(float donation, Province p) {
         //initializing rebate var.
         float rebate = 0;
 
@@ -70,27 +100,27 @@ public class RebateCalc {
 
         //calculating rebate.
         if(donation > 200){
-            rebate += 40+(0.4*(donation-200));
+            rebate += (200*p.getLess())+(p.getMore()*(donation-200));
         }
         else{
             rebate += (0.2 * donation);
         }
 
         //recursive call to calculate rebate on the rebate until the rebate is less than $1.
-        return rebate + calc(rebate);
+        return rebate + calc(rebate, p);
     }
 
     //calculating how much you should donate to donate a specific net amount. I.e. if you want to donate $200,
     //you would donate $267, because the tax rebate on 267 is 67, and therefore you would end up paying a net of $200.
-    public static float equals(float donation){
+    public static float equals(float donation, Province p){
         float amount;
 
         //calculating amounts by solving for the variable x in the linear equation.
-        if(donation/0.8 <= 200){
-            amount = (float)(donation/0.8);
+        if(donation/(1-p.getLess()) <= 200){
+            amount = (float)(donation/(1-p.getLess()));
         }
         else{
-            amount = (float)((donation-40)/0.6);
+            amount = (float)((donation-(p.getLess()*200))/(1-p.getMore()));
         }
 
         return amount;
