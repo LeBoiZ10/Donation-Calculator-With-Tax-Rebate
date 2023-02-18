@@ -107,7 +107,7 @@ public class NationalRebateCalc {
             rebate += (200*p.getLess())+(p.getMore()*(donation-200));
         }
         else{
-            rebate += (0.2 * donation);
+            rebate += (p.getLess() * donation);
         }
 
         //recursive case to calculate rebate on the rebate until the rebate is less than $1.

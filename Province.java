@@ -1,5 +1,5 @@
 /**
- * Provincw class for the rebate calculator. This will help change the calculator from an Ontario-wide program to all of Canada
+ * Province class for the rebate calculator. This will help change the calculator from an Ontario-wide program to all of Canada
  * Takes in the province name, and then allows me to get the tax rate for that particular province
  * Date: 2/15/2023
  * Author: LeBoiZ
