@@ -21,11 +21,13 @@ public class NationalRebateCalc {
 
         //welcome message
         System.out.println("\nWelcome to the multi use donation rebate calculator in Canada!");
-        System.out.println("Before we begin, please enter the province you live in: (you may enter the province code or name)");
+        System.out.println("Before we begin, please enter the province you live in: (you may enter the province code or name, use PEI or PE for prince edward islands)");
 
+        //getting province code and initializing object with it. 
         prov = getProvince();
         livesIn = new Province(prov);
 
+        //getting the user to select which feature they want to use. 
         System.out.println("\nWe currently have 2 features: \n");
         do {
             try {
@@ -49,6 +51,7 @@ public class NationalRebateCalc {
             }
         }while(bolTryCatch);
 
+        //excecuting the feature that the user selected. 
         if (userIn == 1) {
             System.out.println("Enter the donation amount: ");
             donation = new Scanner(System.in).nextFloat();
@@ -65,9 +68,10 @@ public class NationalRebateCalc {
         }
     }
 
+    //getting the province name by iterating through loop to check if the input matches a valid province name. 
     public static String getProvince(){
         String[] provs = {"AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"};
-        String[] provinces = {"Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Islands", "Quebec", "Saskatchewan", "Yukon"};
+        String[] provinces = {"Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "PEI", "Quebec", "Saskatchewan", "Yukon"};
         boolean bol = false;
         String province = "";
         do{
@@ -106,7 +110,7 @@ public class NationalRebateCalc {
             rebate += (0.2 * donation);
         }
 
-        //recursive call to calculate rebate on the rebate until the rebate is less than $1.
+        //recursive case to calculate rebate on the rebate until the rebate is less than $1.
         return rebate + calc(rebate, p);
     }
 
